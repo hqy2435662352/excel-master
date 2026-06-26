@@ -17,5 +17,4 @@
 # ── 白名单：根目录文件 ──
 !SOUL.md
 !README.md
-!config.yaml.template
 !.gitignore

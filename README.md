@@ -40,12 +40,16 @@ ls "$HOME/AppData/Local/hermes/profiles/excel-master/SOUL.md"
 
 ### 步骤 3：部署本仓库文件
 
+从 clone 的仓库目录中，**只复制以下文件**到 profile 目录：
+
 ```bash
+REPO_DIR="<clone 下来的仓库路径>"
 PROFILE_DIR="$HOME/AppData/Local/hermes/profiles/excel-master"
-cp SOUL.md "$PROFILE_DIR/"
-cp -r skills/office "$PROFILE_DIR/skills/"
-cp .gitignore "$PROFILE_DIR/"
+cp "$REPO_DIR/SOUL.md" "$PROFILE_DIR/"
+cp -r "$REPO_DIR/skills/office" "$PROFILE_DIR/skills/"
 ```
+
+> 注意：README.md 和 .gitignore 不复制——它们是仓库元文件，不应进入 profile 运行时目录。
 
 ```bash
 # 验证
@@ -57,18 +61,14 @@ ls "$PROFILE_DIR/skills/office/office-xlsx-core/scripts/officecli-safe"
 
 ### 步骤 4：配置 API key
 
-```bash
-cp config.yaml.template "$PROFILE_DIR/config.yaml"
-```
+`hermes profile create` 已生成默认 `config.yaml`，只需填入 API key：
 
-然后编辑 `config.yaml`，将 `YOUR_DEEPSEEK_API_KEY` 替换为实际 key。
-
-可选：修改 `model.default` 为其他模型（如 `deepseek-v4-pro` 开思考模式）。
+编辑 `$HOME/AppData/Local/hermes/profiles/excel-master/config.yaml`，在 `providers` 或环境变量中配置你的 DeepSeek API key。
 
 ```bash
 # 验证
 grep -c "YOUR_DEEPSEEK_API_KEY" "$PROFILE_DIR/config.yaml"
-# [OK] 输出 0（说明已替换）
+# [OK] 输出 0（说明已替换——如果用的环境变量，跳过此检查）
 ```
 
 ### 步骤 5：验证 profile 可用
