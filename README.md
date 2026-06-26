@@ -46,10 +46,11 @@ ls "$HOME/AppData/Local/hermes/profiles/excel-master/SOUL.md"
 REPO_DIR="<clone 下来的仓库路径>"
 PROFILE_DIR="$HOME/AppData/Local/hermes/profiles/excel-master"
 cp "$REPO_DIR/SOUL.md" "$PROFILE_DIR/"
+cp "$REPO_DIR/.gitignore" "$PROFILE_DIR/"
 cp -r "$REPO_DIR/skills/office" "$PROFILE_DIR/skills/"
 ```
 
-> 注意：README.md 和 .gitignore 不复制——它们是仓库元文件，不应进入 profile 运行时目录。
+> 注意：README.md 不复制——它是仓库元文件，不应进入 profile 运行时目录。`.gitignore` 需要复制——方便后续贡献时本地 git 不被运行时文件污染。
 
 ```bash
 # 验证
