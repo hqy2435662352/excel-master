@@ -1,0 +1,21 @@
+# === excel-master profile .gitignore ===
+# 策略：默认忽略一切，白名单放行需版本化的文件。
+# Hermes 在 profile 目录下生成的运行时文件永远不会意外进入 repo。
+# 新增文件 → 显式加进白名单。
+
+# ── 默认忽略 ──
+*
+
+# ── 白名单：目录 ──
+!skills/
+!skills/office/
+!skills/office/office-xlsx-core/
+!skills/office/office-xlsx-core/**
+!skills/office/xlsx-quote-standardization/
+!skills/office/xlsx-quote-standardization/**
+
+# ── 白名单：根目录文件 ──
+!SOUL.md
+!README.md
+!config.yaml.template
+!.gitignore

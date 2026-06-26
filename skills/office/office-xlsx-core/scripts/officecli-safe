@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# officecli wrapper — token safety guard for excel-master
+# 三层策略：
+#   1. 裸 query "cell" → 硬拦截（10MB 洪水）
+#   2. 筛选 query 但输出 > 150KB → 截断 + 提示用 dump
+#   3. 筛选 query 且输出 ≤ 150KB → 全量透传
+set -o pipefail
+
+REAL_OFFICECLI="C:/Users/Administrator/AppData/Local/hermes/bin/officecli.exe"
+MAX_BYTES=512000  # 500KB ≈ 125K tokens，精准筛选查询的上限
+
+# ── 拦截：裸 query "cell" 不加任何筛选条件 ──
+# 检测规则：selector 中不包含 : 也不包含 [
+if [[ "$1" == "query" ]]; then
+  SELECTOR="$3"
+  if [[ "$SELECTOR" =~ ^\"?cell\"?$ && "$SELECTOR" != *":"* && "$SELECTOR" != *"["* ]]; then
+    cat >&2 <<'EOF'
+{"error":"REJECTED: query \"cell\" without filter.","suggestion":"Use filters: cell[type=Error], cell:has(formula), cell[value>0].","hint":"For full data extraction use: officecli dump <file> -o spec.json"}
+EOF
+    exit 1
+  fi
+
+  # ── 兜底：筛选过的 query，但输出过大 → 截断 ──
+  # 先拿到完整输出的大小
+  OUTPUT=$(command "$REAL_OFFICECLI" "$@" 2>&1)
+  EXIT_CODE=$?
+  BYTE_COUNT=$(echo "$OUTPUT" | wc -c)
+
+  if [[ $BYTE_COUNT -gt $MAX_BYTES ]]; then
+    echo "$OUTPUT" | head -c $MAX_BYTES
+    echo ""
+    echo "--- [TRUNCATED at 500KB. Full output: $BYTE_COUNT bytes. Use 'officecli dump <file> -o spec.json' to get complete data without context overflow.] ---" >&2
+  else
+    echo "$OUTPUT"
+  fi
+  exit $EXIT_CODE
+fi
+
+# ── 非 query 命令 → 正常透传 ──
+exec "$REAL_OFFICECLI" "$@"
