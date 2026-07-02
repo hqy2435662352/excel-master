@@ -1,4 +1,4 @@
-# === excel-master profile .gitignore ===
+# === office-master profile .gitignore ===
 # 策略：默认忽略一切，白名单放行需版本化的文件。
 # Hermes 在 profile 目录下生成的运行时文件永远不会意外进入 repo。
 # 新增文件 → 显式加进白名单。

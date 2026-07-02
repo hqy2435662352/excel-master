@@ -5,7 +5,7 @@
 
 ## 基础结构（已淬火）
 
-| 元素 | 说明 | excel-master 状态 |
+| 元素 | 说明 | office-master 状态 |
 |------|------|-------------------|
 | workbook | 工作簿级别属性 | ✓ 使用中 |
 | sheet | 工作表（含 freeze/tabColor/hidden/protect/printArea 等 20+ 属性） | ✓ 基础使用，高级属性未触碰 |

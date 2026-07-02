@@ -1,4 +1,4 @@
-# excel-master 能力缺口
+# office-master 能力缺口
 
 > v1.0 已知边界。当用户需求落入以下领域时，**不盲做**——先告知这是已知缺口，触发需求讨论。
 
@@ -21,12 +21,13 @@
 
 ---
 
-## 非 xlsx 格式
+## 格式兼容性
 
 | 格式 | 策略 |
 |------|------|
-| `.docx` / `.pptx` | 直接返回 REJECTED，不尝试处理 |
-| `.csv` / `.tsv` | 可以用 `officecli import` 转 xlsx 后处理（属于 v1 能力） |
+| `.xlsx` | 主力支持（Tier 1/2 决策框架全覆盖） |
+| `.docx` / `.pptx` | 通过 officecli 原生支持，查 `officecli help docx` / `officecli help pptx` |
+| `.csv` / `.tsv` | 可以用 `officecli import` 转 xlsx 后处理 |
 | `.xls` (旧格式) | 不支持，告知用户需先转为 .xlsx |
 | `.xlsm` (宏) | 可读取数据，但宏/VBA 不处理 |
 
@@ -46,4 +47,5 @@
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v1.1 | 2026-07-02 | 解禁 docx/pptx，profile 从 excel-master 改名 office-master |
 | v1.0 | 2026-06-26 | 初始发布 |

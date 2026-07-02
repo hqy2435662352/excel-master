@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# officecli wrapper — token safety guard for excel-master
+# officecli wrapper — token safety guard for office-master
 # 三层策略：
 #   1. 裸 query "cell" → 硬拦截（10MB 洪水）
 #   2. 筛选 query 但输出 > 150KB → 截断 + 提示用 dump

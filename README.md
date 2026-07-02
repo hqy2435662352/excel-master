@@ -1,6 +1,6 @@
-# excel-master
+# office-master
 
-专门处理 Excel (.xlsx) 文件的 Hermes Agent profile。基于 [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) + openpyxl 双引擎，Tier 1/2 决策框架覆盖 19 种日常 xlsx 操作。
+处理 Office 文档（.xlsx / .docx / .pptx）的 Hermes Agent profile。基于 [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) + openpyxl 双引擎，Tier 1/2 决策框架覆盖 19 种日常 xlsx 操作，docx/pptx 通过 officecli 原生支持。
 
 ## Agent 部署指南
 
@@ -29,12 +29,12 @@ officecli --version
 ### 步骤 2：创建 profile 骨架
 
 ```bash
-hermes profile create excel-master
+hermes profile create office-master
 ```
 
 ```bash
 # 验证
-ls "$HOME/AppData/Local/hermes/profiles/excel-master/SOUL.md"
+ls "$HOME/AppData/Local/hermes/profiles/office-master/SOUL.md"
 # [OK] 文件存在
 ```
 
@@ -44,7 +44,7 @@ ls "$HOME/AppData/Local/hermes/profiles/excel-master/SOUL.md"
 
 ```bash
 REPO_DIR="<clone 下来的仓库路径>"
-PROFILE_DIR="$HOME/AppData/Local/hermes/profiles/excel-master"
+PROFILE_DIR="$HOME/AppData/Local/hermes/profiles/office-master"
 cp "$REPO_DIR/SOUL.md" "$PROFILE_DIR/"
 cp "$REPO_DIR/.gitignore" "$PROFILE_DIR/"
 cp -r "$REPO_DIR/skills/office" "$PROFILE_DIR/skills/"
@@ -64,7 +64,7 @@ ls "$PROFILE_DIR/skills/office/office-xlsx-core/scripts/officecli-safe"
 
 `hermes profile create` 已生成默认 `config.yaml`，只需填入 API key：
 
-编辑 `$HOME/AppData/Local/hermes/profiles/excel-master/config.yaml`，在 `providers` 或环境变量中配置你的 DeepSeek API key。
+编辑 `$HOME/AppData/Local/hermes/profiles/office-master/config.yaml`，在 `providers` 或环境变量中配置你的 DeepSeek API key。
 
 ```bash
 # 验证
@@ -75,12 +75,12 @@ grep -c "YOUR_DEEPSEEK_API_KEY" "$PROFILE_DIR/config.yaml"
 ### 步骤 5：验证 profile 可用
 
 ```bash
-hermes profile use excel-master
+hermes profile use office-master
 hermes profile show
 ```
 
 ```bash
-# 验证：启动 excel-master 并测试
+# 验证：启动 office-master 并测试
 # 发送 "hello, 确认你已加载 office-xlsx-core skill"
 # [OK] Agent 回复中确认已加载
 ```
@@ -91,7 +91,7 @@ hermes profile show
 
 | 依赖 | 版本 | 用途 |
 |------|------|------|
-| [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) | ≥ v1.0.116 | xlsx CLI 操作引擎 |
+| [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) | ≥ v1.0.116 | Office 文档 CLI 操作引擎 |
 | [Hermes Agent](https://hermes-agent.nousresearch.com) | 最新 | Agent 运行时 |
 | openpyxl | 随 OfficeCLI 环境 | 复杂数据处理回退方案 |
 
@@ -100,12 +100,12 @@ hermes profile show
 ## 架构
 
 ```
-excel-master/
-├── SOUL.md                      # 人格层：xlsx 独占 + 需求洁癖 + 反模式嗅觉 + 冷幽默
+office-master/
+├── SOUL.md                      # 人格层：Office 文档全能 + 需求洁癖 + 反模式嗅觉 + 冷幽默
 ├── config.yaml.template         # 配置模板（复制后填 key）
 ├── .gitignore                   # 白名单策略，隔离运行时文件
 └── skills/office/
-    ├── office-xlsx-core/        # 核心：Tier 1(13项) + Tier 2(6项) 决策框架
+    ├── office-xlsx-core/        # 核心：Tier 1(13项) + Tier 2(6项) xlsx 决策框架
     │   ├── SKILL.md
     │   ├── scripts/officecli-safe    # Token 防线 wrapper
     │   └── references/
@@ -119,13 +119,13 @@ excel-master/
 
 ## 能力边界
 
-| 能做（v1） | 不能做（已知缺口，触发需求讨论） |
-|-----------|-------------------------------|
-| 查看结构/问题/统计 | 数据透视表 + 切片器 |
-| 改值/改格式/改公式 | 公式审计/依赖分析 |
-| 冻结窗格/筛选/条件格式/表格 | raw XML 操作 |
-| 图表/迷你图/命名区域 | 多工作簿合并/外部引用 |
-| 数据验证/CSV 导入/打印设置 | openpyxl 深度（块探测/列映射） |
-| 批操作（dump → Python → batch） | 超大文件（>200MB）未实测 |
+| 能做（v1.1） | 不能做（已知缺口，触发需求讨论） |
+|-------------|-------------------------------|
+| xlsx：查看/改值/格式/公式/图表/透视表基础 | 数据透视表 + 切片器 |
+| xlsx：冻结窗格/筛选/条件格式/表格 | 公式审计/依赖分析 |
+| xlsx：迷你图/命名区域/数据验证/CSV 导入 | raw XML 操作 |
+| xlsx：批操作（dump → Python → batch） | 多工作簿合并/外部引用 |
+| docx：段落/表格/图表/批注/书签/编号 | openpyxl 深度（块探测/列映射） |
+| pptx：幻灯片/形状/文本框/图表/表格 | 超大文件（>200MB）未实测 |
 
 详见 `skills/office/office-xlsx-core/references/CAPABILITY_GAPS.md`
